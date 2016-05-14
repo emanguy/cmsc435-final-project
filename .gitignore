@@ -29,3 +29,6 @@
 
 # Compile folders
 build-*/*
+
+# Temporary build file
+FinalProject/FinalProject.pro.user
