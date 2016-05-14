@@ -14,10 +14,17 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         nielsenvis.cpp \
-    renderarea.cpp
+    renderarea.cpp \
+    BarChart.cpp \
+    Chart.cpp \
+    DDIMatrix.cpp \
+    Triangle.cpp
 
 HEADERS  += nielsenvis.h \
-    renderarea.h
+    renderarea.h \
+    BarChart.h \
+    Chart.h \
+    DDIMatrix.h
 
 FORMS    += nielsenvis.ui
 
