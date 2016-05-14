@@ -24,7 +24,8 @@ HEADERS  += nielsenvis.h \
     renderarea.h \
     BarChart.h \
     Chart.h \
-    DDIMatrix.h
+    DDIMatrix.h \
+    Triangle.h
 
 FORMS    += nielsenvis.ui
 
