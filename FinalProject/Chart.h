@@ -12,6 +12,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <QGLWidget>
 #include "DDIMatrix.h"
 #include "BarChart.h"
 
@@ -44,7 +45,7 @@ class Chart
   Chart(float width, float height);
 
   // Renders all bar graphs in vector
-  void Render();
+  void Render(QGLWidget* renderArea);
 
   // Sets list that will be shown in bar graph
   void setList(DDIMatrix matrix);

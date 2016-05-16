@@ -2,7 +2,7 @@
 #include <QDebug>
 
 DisplayManager::DisplayManager(QObject *parent) : QObject(parent),
-    chartPaddingV(50),
+    chartPaddingV(150),
     chartPaddingH(10),
     chartWidth(400),
     chartHeight(100),
@@ -27,11 +27,12 @@ DisplayManager::~DisplayManager()
 void DisplayManager::Render(QGLWidget* renderArea)
 {
     list<Chart>::iterator iterator;
+    QString label;
 
     // Loop through all charts and render
     for (iterator = charts.begin(); iterator != charts.end(); iterator++)
     {
-        iterator->Render();
+        iterator->Render(renderArea);
     }
 }
 

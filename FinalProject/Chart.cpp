@@ -42,10 +42,16 @@ Chart::Chart(float width, float height){
 /  onto the screen. This function will loop through the entire vector and
 /  place the bar charts accordingly.
 */
-void Chart::Render(){
+void Chart::Render(QGLWidget* renderArea){
 
   // Size of list of bar charts
   int vecSize = c_barCharts.size();
+
+  // Render label
+  QString label(m_type == DEMO? "Demographic: " : "Market: ");
+  label += + m_name.c_str();
+  glColor3f(1, 1, 0);
+  renderArea->renderText(c_absX, c_absY + c_height - 10, label);
 
   for(int i = 0; i < vecSize; i++){
 
