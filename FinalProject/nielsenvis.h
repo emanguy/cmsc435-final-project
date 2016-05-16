@@ -33,9 +33,9 @@ signals:
     void chartAddRequest(const string& demoOrMktName, bool isDemo);
 
 public slots:
-    void findCurrentData(bool checked);
-    void findPlanningData(bool checked);
-    void findFinalData(bool checked);
+    void findCurrentData();
+    void findPlanningData();
+    void findFinalData();
 
     // Updates DDI data from display manager when data is refreshed
     void updateDDI(list<string> demos, list<string> markets);

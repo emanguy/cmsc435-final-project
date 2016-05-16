@@ -12,9 +12,17 @@
 
 using namespace std;
 
+// Defines used for sort order
+#define ALPHA_SORT 0
+#define INTER_SORT 1
+#define PLANN_SORT 2
+#define FINAL_SORT 3
+
 class DisplayManager : public QObject
 {
     Q_OBJECT
+public:
+    typedef void (Chart::*SortOrder)();
 private:
     float chartWidth, chartHeight, chartPaddingV, chartPaddingH;
     int renderWidth;
@@ -24,6 +32,8 @@ private:
 
     DDIMatrix *graphData;
     list<Chart> charts;
+
+    SortOrder sortMethods[4] = { &Chart::sortAlpha, &Chart::sortInter, &Chart::sortPlan, &Chart::sortFinal };
 
 public:
     explicit DisplayManager(QObject *parent = 0);
@@ -45,6 +55,9 @@ public slots:
 
     // Adds a chart based on request
     void chartAdd(const string& category, bool isDemo);
+
+    // Set sort order for all charts
+    void setSortOrder(int sortOrder);
 };
 
 #endif // DISPLAYMANAGER_H

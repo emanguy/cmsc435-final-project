@@ -2,8 +2,8 @@
 #include <QDebug>
 
 DisplayManager::DisplayManager(QObject *parent) : QObject(parent),
-    chartPaddingV(150),
     chartPaddingH(10),
+    chartPaddingV(150),
     chartWidth(400),
     chartHeight(100),
     renderWidth(420),
@@ -123,4 +123,22 @@ void DisplayManager::chartAdd(const string &category, bool isDemo)
     charts.push_back(newChart);
 
     emit requestRedraw();
+}
+
+void DisplayManager::setSortOrder(int sortOrder)
+{
+    list<Chart>::iterator iterator = charts.begin();
+
+    if (sortOrder >= 0 && sortOrder <= 4)
+    {
+        SortOrder functionCall = sortMethods[sortOrder];
+
+        // Loop through each of the charts setting the new sort order
+        for ( ; iterator != charts.end(); iterator++)
+        {
+            ((*iterator).*functionCall)();
+        }
+
+        emit requestRedraw();
+    }
 }

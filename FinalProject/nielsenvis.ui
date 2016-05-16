@@ -53,6 +53,9 @@
             <property name="checked">
              <bool>true</bool>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">sortStyles</string>
+            </attribute>
            </widget>
           </item>
           <item>
@@ -60,6 +63,9 @@
             <property name="text">
              <string>By Interim DDI</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">sortStyles</string>
+            </attribute>
            </widget>
           </item>
           <item>
@@ -67,6 +73,9 @@
             <property name="text">
              <string>By Planning DDI</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">sortStyles</string>
+            </attribute>
            </widget>
           </item>
           <item>
@@ -74,6 +83,9 @@
             <property name="text">
              <string>By Final DDI</string>
             </property>
+            <attribute name="buttonGroup">
+             <string notr="true">sortStyles</string>
+            </attribute>
            </widget>
           </item>
          </layout>
@@ -192,4 +204,7 @@
  </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="sortStyles"/>
+ </buttongroups>
 </ui>

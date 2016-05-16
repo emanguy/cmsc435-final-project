@@ -11,10 +11,20 @@ NielsenVis::NielsenVis(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->sortStyles->setId(ui->Name, ALPHA_SORT);
+    ui->sortStyles->setId(ui->Int, INTER_SORT);
+    ui->sortStyles->setId(ui->Plan, PLANN_SORT);
+    ui->sortStyles->setId(ui->Final, FINAL_SORT);
+
+    /////////////// END RADIO BUTTON STUFF ///////////////
+
+    // Connect all radio buttons to DisplayManager sort orders
+    connect(ui->sortStyles, SIGNAL(buttonClicked(int)), &renderer, SLOT(setSortOrder(int)));
+
     // Connect buttons to local file dialog functions
-    connect(ui->Planning, SIGNAL(clicked(bool)), this, SLOT(findPlanningData(bool)));
-    connect(ui->Interim, SIGNAL(clicked(bool)), this, SLOT(findCurrentData(bool)));
-    connect(ui->FinalCsv, SIGNAL(clicked(bool)), this, SLOT(findFinalData(bool)));
+    connect(ui->Planning, SIGNAL(clicked()), this, SLOT(findPlanningData()));
+    connect(ui->Interim, SIGNAL(clicked()), this, SLOT(findCurrentData()));
+    connect(ui->FinalCsv, SIGNAL(clicked()), this, SLOT(findFinalData()));
 
     // Connect the gotDataFile signal to the display manager
     connect(this, SIGNAL(gotDataFile(string,eDataType)), &renderer, SLOT(updateFile(string,eDataType)));
@@ -44,7 +54,7 @@ NielsenVis::~NielsenVis()
 }
 
 // Show file picker for interim data
-void NielsenVis::findCurrentData(bool checked)
+void NielsenVis::findCurrentData()
 {
      QString selectedFile = QFileDialog::getOpenFileName(this,
                                                          "Find interim data",
@@ -58,7 +68,7 @@ void NielsenVis::findCurrentData(bool checked)
 }
 
 // Show file picker for planning data
-void NielsenVis::findPlanningData(bool checked)
+void NielsenVis::findPlanningData()
 {
     QString selectedFile = QFileDialog::getOpenFileName(this,
                                                         "Find planning data",
@@ -72,7 +82,7 @@ void NielsenVis::findPlanningData(bool checked)
 }
 
 // Show file picker for final data
-void NielsenVis::findFinalData(bool checked)
+void NielsenVis::findFinalData()
 {
     QString selectedFile = QFileDialog::getOpenFileName(this,
                                                         "Find final data",
