@@ -1,4 +1,5 @@
 #include "renderarea.h"
+#include <QDebug>
 
 RenderArea::RenderArea( QWidget *parent):
     QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
@@ -6,14 +7,17 @@ RenderArea::RenderArea( QWidget *parent):
     height(100),
     chartsAdded(0)
 {
+}
 
+void RenderArea::setDisplayManager(DisplayManager *renderer)
+{
+    RenderArea::renderer = renderer;
 }
 
 void RenderArea::initializeGL()
 {
     // Set the clear color and allow colored rendering
     glClearColor(0,0,0,1);
-    glDisable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
     glDisable(GL_LIGHTING);
 }
@@ -50,9 +54,14 @@ void RenderArea::resizeGL(int w, int h)
     height = h;
 }
 
+void RenderArea::resizeEvent(QResizeEvent *)
+{
+    // Notify listeners that the render area has been resized
+    emit resized(geometry().width(), geometry().height());
+}
+
 void RenderArea::chartAdded()
 {
-    // "Add" a new chart
-    chartsAdded++;
+    // Make a request to rerender the screen content
     updateGL();
 }

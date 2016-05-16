@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     BarChart.cpp \
     Chart.cpp \
     DDIMatrix.cpp \
-    Triangle.cpp
+    Triangle.cpp \
+    displaymanager.cpp
 
 HEADERS  += nielsenvis.h \
     renderarea.h \
     BarChart.h \
     Chart.h \
     DDIMatrix.h \
-    Triangle.h
+    Triangle.h \
+    displaymanager.h
 
 FORMS    += nielsenvis.ui
 

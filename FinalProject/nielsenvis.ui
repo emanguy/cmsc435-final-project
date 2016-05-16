@@ -122,7 +122,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="DemMark">
+           <widget class="QComboBox" name="CatDDown">
             <item>
              <property name="text">
               <string>Needs .CSV files.</string>
@@ -141,21 +141,21 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="Planning">
+        <widget class="QPushButton" name="Interim">
          <property name="text">
           <string>Add interim .csv data</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="FinalCsv">
+        <widget class="QPushButton" name="Planning">
          <property name="text">
           <string>Add planning .csv data</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="Interim">
+        <widget class="QPushButton" name="FinalCsv">
          <property name="text">
           <string>Add final .csv data</string>
          </property>
@@ -171,6 +171,9 @@
         <horstretch>3</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -190,22 +193,5 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>Add</sender>
-   <signal>clicked()</signal>
-   <receiver>Render</receiver>
-   <slot>chartAdded()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>117</x>
-     <y>377</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>352</x>
-     <y>349</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

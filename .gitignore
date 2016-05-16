@@ -30,5 +30,8 @@
 # Compile folders
 build-*/*
 
+# CSV input data files
+*.csv
+
 # Temporary build file
 FinalProject/FinalProject.pro.user

@@ -58,6 +58,12 @@ class Chart
   // Sets Z value and sets bar widths
   void setDimensions();
 
+  // Set width and height of this chart. Will not apply until setDimensions() is called
+  void setWidth(float width);
+  void setHeight(float height);
+  void setAbsX(float absX);
+  void setAbsY(float absY);
+
   // Different kind of vector sorting
   void sortAlpha();
   void sortInter();

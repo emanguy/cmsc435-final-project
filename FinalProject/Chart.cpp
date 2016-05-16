@@ -255,6 +255,26 @@ void Chart::setDimensions(){
 
 }
 
+void Chart::setWidth(float width)
+{
+    c_width = width;
+}
+
+void Chart::setHeight(float height)
+{
+    c_height = height;
+}
+
+void Chart::setAbsX(float absX)
+{
+    c_absX = absX;
+}
+
+void Chart::setAbsY(float absY)
+{
+    c_absY = absY;
+}
+
 void Chart::sortAlpha(){
 
   sort(c_barCharts.begin(), c_barCharts.end(), compareByAlpha);

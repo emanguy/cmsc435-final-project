@@ -216,6 +216,32 @@ void DDIMatrix::dumpDemo(string demoID)
   }
 }
 
+ListS DDIMatrix::getDemos()
+{
+    ListS demos;
+    map<string, list<DDIMatrixEntry*> >::iterator iterator;
+
+    for (iterator = mDemoMap.begin(); iterator != mDemoMap.end(); iterator++)
+    {
+        demos.push_back(iterator->first);
+    }
+
+    return demos;
+}
+
+ListS DDIMatrix::getMarkets()
+{
+    ListS markets;
+    map<string, list<DDIMatrixEntry*> >::iterator iterator;
+
+    for (iterator = mMarketMap.begin(); iterator != mMarketMap.end(); iterator++)
+    {
+        markets.push_back(iterator->first);
+    }
+
+    return markets;
+}
+
 ListS DDIMatrix::getMarket(string demoID){
   ListS result;
   map<string, list<DDIMatrixEntry*> >::iterator itMap = mDemoMap.find(demoID);
