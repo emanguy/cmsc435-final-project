@@ -103,12 +103,9 @@
              </item>
              <item>
               <widget class="QComboBox" name="PrimKey">
-               <property name="currentText">
-                <string notr="true">DDI</string>
-               </property>
                <item>
                 <property name="text">
-                 <string>DDI</string>
+                 <string>Demographic</string>
                 </property>
                </item>
                <item>
@@ -179,6 +176,7 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

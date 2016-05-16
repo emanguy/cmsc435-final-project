@@ -1,10 +1,13 @@
 #include "displaymanager.h"
+#include <QDebug>
 
 DisplayManager::DisplayManager(QObject *parent) : QObject(parent),
-    chartPaddingV(10),
+    chartPaddingV(50),
     chartPaddingH(10),
     chartWidth(400),
-    chartHeight(100)
+    chartHeight(100),
+    renderWidth(420),
+    renderHeight(500)
 {
         graphData = NULL;
         updatedFileName[INTERIM] = false;
@@ -19,6 +22,17 @@ DisplayManager::~DisplayManager()
                 delete graphData;
                 graphData = NULL;
         }
+}
+
+void DisplayManager::Render(QGLWidget* renderArea)
+{
+    list<Chart>::iterator iterator;
+
+    // Loop through all charts and render
+    for (iterator = charts.begin(); iterator != charts.end(); iterator++)
+    {
+        iterator->Render();
+    }
 }
 
 void DisplayManager::setChartDimensions(float width, float height)
@@ -51,6 +65,10 @@ void DisplayManager::renderAreaResized(int width, int height)
 
         currentHeight += chartHeight + chartPaddingV;
     }
+
+    // Save the current width and height
+    DisplayManager::renderWidth = width;
+    DisplayManager::renderHeight = height;
 }
 
 void DisplayManager::updateFile(const string &fileName, eDataType whichFile)
@@ -86,4 +104,22 @@ void DisplayManager::updateFile(const string &fileName, eDataType whichFile)
     }
 }
 
-// TODO write functions for getting all demo/market names
+// Adds a requested chart
+void DisplayManager::chartAdd(const string &category, bool isDemo)
+{
+    Chart newChart(chartWidth, chartHeight);
+
+    // Specify data for chart
+    newChart.setType((isDemo? DEMO : MARKET));
+    newChart.setName(category);
+    newChart.setList(*graphData);
+
+    // Set size of chart
+    newChart.setAbsX(chartPaddingH);
+    newChart.setAbsY((charts.size() + 1) * chartPaddingV + chartHeight * charts.size());
+    newChart.setDimensions();
+
+    charts.push_back(newChart);
+
+    emit requestRedraw();
+}

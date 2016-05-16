@@ -5,7 +5,8 @@ RenderArea::RenderArea( QWidget *parent):
     QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
     width(100),
     height(100),
-    chartsAdded(0)
+    chartsAdded(0),
+    renderer(NULL)
 {
 }
 
@@ -18,6 +19,7 @@ void RenderArea::initializeGL()
 {
     // Set the clear color and allow colored rendering
     glClearColor(0,0,0,1);
+    glEnable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
     glDisable(GL_LIGHTING);
 }
@@ -25,16 +27,12 @@ void RenderArea::initializeGL()
 void RenderArea::paintGL()
 {
     // Clear display buffer
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Set color to red
-    glColor3f(1.0, 0.0, 0.0);
-    glLineWidth(3.0);
-
-    // Draw "charts"
-    for (int chart = 0; chart < chartsAdded; chart++)
+    // Render display manager contents
+    if (renderer != NULL)
     {
-        renderText( width / 8, height * (chart + 1) / 16, "A chart has been added" );
+        renderer->Render(this);
     }
 
     glFlush();
@@ -58,6 +56,7 @@ void RenderArea::resizeEvent(QResizeEvent *)
 {
     // Notify listeners that the render area has been resized
     emit resized(geometry().width(), geometry().height());
+    resizeGL(geometry().width(), geometry().height());
 }
 
 void RenderArea::chartAdded()

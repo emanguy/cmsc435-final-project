@@ -7,12 +7,7 @@
 #include "BarChart.h"
 #include <GL/glut.h>
 #include <GL/gl.h>
-
-#ifdef __APPLE__
-  #include <GLUT/glut.h>
-#else
-  #include <GL/glut.h>
-#endif
+#include <QDebug>
 
 Chart::Chart(){
 
@@ -120,7 +115,7 @@ void Chart::setList(DDIMatrix matrix){
 
     for(int i = 0; i < matrix.getDCount(m_name); i++){
 	BarChart barChart;
-	advance(list_front, i);
+    advance(list_front, i);
 
 	barChart.setPlan(matrix.getDDI(m_name, *list_front, PLANNING));
 	barChart.setInter(matrix.getDDI(m_name, *list_front, INTERIM));
@@ -141,9 +136,9 @@ void Chart::setList(DDIMatrix matrix){
       BarChart barChart;
       advance(list_front, i);
 
-      barChart.setPlan(matrix.getDDI(m_name, *list_front, PLANNING));
-      barChart.setInter(matrix.getDDI(m_name, *list_front, INTERIM));
-      barChart.setFinal(matrix.getDDI(m_name, *list_front, FINAL));
+      barChart.setPlan(matrix.getDDI(*list_front, m_name, PLANNING));
+      barChart.setInter(matrix.getDDI(*list_front, m_name,  INTERIM));
+      barChart.setFinal(matrix.getDDI(*list_front, m_name, FINAL));
 
       barChart.setName(*list_front);
 

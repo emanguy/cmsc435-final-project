@@ -6,7 +6,8 @@
 
 NielsenVis::NielsenVis(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::NielsenVis)
+    ui(new Ui::NielsenVis),
+    hasDDIData(false)
 {
     ui->setupUi(this);
 
@@ -22,6 +23,19 @@ NielsenVis::NielsenVis(QWidget *parent) :
     connect(&renderer, SIGNAL(ddiDataAdded(list<string>,list<string>)),
             this, SLOT(updateDDI(list<string>,list<string>)));
     connect(ui->PrimKey, SIGNAL(activated(int)), this, SLOT(populateCBox(int)));
+
+    // Set off the event chain when the Add Graph button is clicked
+    connect(ui->Add, SIGNAL(clicked()), this, SLOT(prepareChartAdd()));
+    connect(this, SIGNAL(chartAddRequest(string,bool)), &renderer, SLOT(chartAdd(string, bool)));
+    connect(&renderer, SIGNAL(requestRedraw()), ui->Render, SLOT(chartAdded()));
+
+    // Make the display manager resize its contents when the window resizes
+    connect(ui->Render, SIGNAL(resized(int,int)), &renderer, SLOT(renderAreaResized(int,int)));
+
+    ////////////// END EVENT BINDING //////////////////
+
+    // Set the display manager on the render widget
+    ui->Render->setDisplayManager(&renderer);
 }
 
 NielsenVis::~NielsenVis()
@@ -77,6 +91,9 @@ void NielsenVis::updateDDI(list<string> demos, list<string> markets)
     demoList = demos;
     mktList = markets;
 
+    // If this has been called it means that we actually have DDI data
+    hasDDIData = true;
+
     // Populate dropdown box with data
     populateCBox(ui->PrimKey->currentIndex());
 }
@@ -106,5 +123,20 @@ void NielsenVis::populateCBox(int index)
     for ( ; iterator != end; iterator++)
     {
         ui->CatDDown->addItem(iterator->c_str());
+    }
+}
+
+// Prepare combobox data for adding a chart
+void NielsenVis::prepareChartAdd()
+{
+    // If we actually have DDI data prepare to add a chart
+    if (hasDDIData)
+    {
+        // Give the demo/market and mark whether the text is a demo or market
+        emit chartAddRequest(ui->CatDDown->currentText().toUtf8().constData(), (ui->PrimKey->currentIndex() == 0));
+    }
+    else
+    {
+        qDebug() << "No chart data found";
     }
 }

@@ -26,8 +26,11 @@ private:
     list<string> demoList;
     list<string> mktList;
 
+    bool hasDDIData;
+
 signals:
     void gotDataFile(const string& fileName, eDataType whichFile);
+    void chartAddRequest(const string& demoOrMktName, bool isDemo);
 
 public slots:
     void findCurrentData(bool checked);
@@ -39,6 +42,9 @@ public slots:
 
     // Repopulates the combo box with a different list of options
     void populateCBox(int index);
+
+    // Prepares combobox data for a chartAddRequest emission
+    void prepareChartAdd();
 };
 
 #endif // NIELSENVIS_H
