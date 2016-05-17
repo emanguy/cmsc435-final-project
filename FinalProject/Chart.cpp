@@ -7,7 +7,6 @@
 #include "BarChart.h"
 #include <GL/glut.h>
 #include <GL/gl.h>
-#include <QDebug>
 
 Chart::Chart(){
 
@@ -322,6 +321,16 @@ float Chart::getChartHeight(){
 
   return c_height;
 
+}
+
+float Chart::getChartY()
+{
+    return c_absY;
+}
+
+float Chart::getChartX()
+{
+    return c_absX;
 }
 
 

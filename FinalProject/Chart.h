@@ -78,6 +78,8 @@ class Chart
   // In case for whatever reason you want the chart dimensions
   float getChartWidth();
   float getChartHeight();
+  float getChartY();
+  float getChartX();
 
  private:
 

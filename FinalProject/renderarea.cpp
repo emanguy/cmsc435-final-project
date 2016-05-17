@@ -1,5 +1,4 @@
 #include "renderarea.h"
-#include <QDebug>
 
 RenderArea::RenderArea( QWidget *parent):
     QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
@@ -57,6 +56,15 @@ void RenderArea::resizeEvent(QResizeEvent *)
     // Notify listeners that the render area has been resized
     emit resized(geometry().width(), geometry().height());
     resizeGL(geometry().width(), geometry().height());
+}
+
+void RenderArea::mouseMoveEvent(QMouseEvent *e)
+{
+    emit mouseMoved(e->x(), e->y());
+}
+void RenderArea::mouseReleaseEvent(QMouseEvent *)
+{
+    emit mouseClicked();
 }
 
 void RenderArea::chartAdded()

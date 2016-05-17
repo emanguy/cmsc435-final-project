@@ -1,11 +1,11 @@
 #include "displaymanager.h"
-#include <QDebug>
 
+// Construct a DisplayManager object
 DisplayManager::DisplayManager(QObject *parent) : QObject(parent),
-    chartPaddingH(10),
-    chartPaddingV(150),
     chartWidth(400),
     chartHeight(100),
+    chartPaddingV(150), // Bars are positioned weird so I had to seriously bump up the padding between them
+    chartPaddingH(20),
     renderWidth(420),
     renderHeight(500)
 {
@@ -15,6 +15,7 @@ DisplayManager::DisplayManager(QObject *parent) : QObject(parent),
         updatedFileName[FINAL] = false;
 }
 
+// Deletes dynamically allocated DDIMatrix when this is destroyed
 DisplayManager::~DisplayManager()
 {
         if (graphData != NULL)
@@ -22,36 +23,79 @@ DisplayManager::~DisplayManager()
                 delete graphData;
                 graphData = NULL;
         }
+
+        // TODO remove listeners before delete
+        for (list<ChartCloseButton*>::iterator it = closeButtons.begin(); it != closeButtons.end(); it++)
+        {
+            disconnect(*it, SIGNAL(clicked(list<Chart>::iterator, list<ChartCloseButton*>::iterator)),
+                       this, SLOT(removeChart(list<Chart>::iterator,list<ChartCloseButton*>::iterator)));
+            delete (*it);
+        }
+
+        closeButtons.clear();
 }
 
+// Called during a chart removal to remove chart buttons from the list
+void DisplayManager::garbageCollect()
+{
+    for (list<list<ChartCloseButton*>::iterator>::iterator it = garbage.begin(); it != garbage.end(); it++)
+    {
+        closeButtons.erase(*it);
+    }
+
+    garbage.clear();
+}
+
+// Called by the GL widget to render charts
 void DisplayManager::Render(QGLWidget* renderArea)
 {
     list<Chart>::iterator iterator;
-    QString label;
+    list<ChartCloseButton*>::iterator btnIterator;
 
     // Loop through all charts and render
     for (iterator = charts.begin(); iterator != charts.end(); iterator++)
     {
         iterator->Render(renderArea);
     }
+
+    // Loop through all buttons and render
+    for (btnIterator = closeButtons.begin(); btnIterator != closeButtons.end(); btnIterator++)
+    {
+        (*btnIterator)->Render();
+    }
+
+    // Add a legend at the bottom
+    glColor3f(0, 1, 0);
+    renderArea->renderText(0, renderHeight - 50, "Interim");
+
+    glColor3f(1, 0 , 0);
+    renderArea->renderText(0, renderHeight - 30, "Planning");
+
+    glColor3f(0, 0.5, 1);
+    renderArea->renderText(0, renderHeight - 10, "Final");
+
 }
 
+// Set the width and height of all charts manually
 void DisplayManager::setChartDimensions(float width, float height)
 {
     chartWidth = width;
     chartHeight = height;
 }
 
+// Set vertical and horizontal padding between charts
 void DisplayManager::setChartPadding(float vertical, float horizontal)
 {
     chartPaddingV = vertical;
     chartPaddingH = horizontal;
 }
 
+// Adjusts rendered content based on a widget resize
 void DisplayManager::renderAreaResized(int width, int height)
 {
     // Set up an iterator and compute the starting height of charts as well as width
     list<Chart>::iterator it = charts.begin();
+    list<ChartCloseButton*>::iterator btnIt = closeButtons.begin();
     float currentHeight = chartPaddingV;
     chartWidth = width - 2 * chartPaddingH;
 
@@ -64,7 +108,11 @@ void DisplayManager::renderAreaResized(int width, int height)
         it->setAbsY(currentHeight);
         it->setDimensions();
 
+        (*btnIt)->setX(chartPaddingH + chartWidth + 5);
+        (*btnIt)->setY(currentHeight);
+
         currentHeight += chartHeight + chartPaddingV;
+        btnIt++; // Advance button iterator in time with with chart iterator
     }
 
     // Save the current width and height
@@ -72,6 +120,7 @@ void DisplayManager::renderAreaResized(int width, int height)
     DisplayManager::renderHeight = height;
 }
 
+// Slot for adding data files
 void DisplayManager::updateFile(const string &fileName, eDataType whichFile)
 {
     // Update file name for file type and mark it as having been updated
@@ -138,6 +187,7 @@ void DisplayManager::updateFile(const string &fileName, eDataType whichFile)
 void DisplayManager::chartAdd(const string &category, bool isDemo)
 {
     Chart newChart(chartWidth, chartHeight);
+    list<Chart>::iterator chartIt;
 
     // Specify data for chart
     newChart.setType((isDemo? DEMO : MARKET));
@@ -149,11 +199,23 @@ void DisplayManager::chartAdd(const string &category, bool isDemo)
     newChart.setAbsY((charts.size() + 1) * chartPaddingV + chartHeight * charts.size());
     newChart.setDimensions();
 
-    charts.push_back(newChart);
+    chartIt = charts.insert(charts.end(), newChart);
+
+    // Add button to go along with chart
+    ChartCloseButton* chartBtn = new ChartCloseButton(chartPaddingH + chartWidth + 5, newChart.getChartY());
+    list<ChartCloseButton*>::iterator btnIt;
+
+    // Add relevant iterators to button (removing elements does not invalidate iterators), attach event listener, add to list
+    chartBtn->setRelevantChart(chartIt);
+    connect(chartBtn, SIGNAL(clicked(list<Chart>::iterator, list<ChartCloseButton*>::iterator)),
+            this, SLOT(removeChart(list<Chart>::iterator, list<ChartCloseButton*>::iterator)));
+    btnIt = closeButtons.insert(closeButtons.end(), chartBtn);
+    chartBtn->setSelfIterator(btnIt);
 
     emit requestRedraw();
 }
 
+// Set the sort order of all visible charts
 void DisplayManager::setSortOrder(int sortOrder)
 {
     list<Chart>::iterator iterator = charts.begin();
@@ -171,3 +233,44 @@ void DisplayManager::setSortOrder(int sortOrder)
         emit requestRedraw();
     }
 }
+
+// Remove a chart on request
+void DisplayManager::removeChart(list<Chart>::iterator chart, list<ChartCloseButton*>::iterator button)
+{
+    ChartCloseButton* tempStorage = *button;
+
+    // Remove chart
+    charts.erase(chart);
+
+    // Disconnect event listener, delete dynamically allocated button, remove button from list
+    disconnect(tempStorage, SIGNAL(clicked(list<Chart>::iterator,list<ChartCloseButton*>::iterator)),
+               this, SLOT(removeChart(list<Chart>::iterator,list<ChartCloseButton*>::iterator)));
+    delete tempStorage;
+    garbage.push_back(button);
+}
+
+void DisplayManager::handleMouseMove(int x, int y)
+{
+    // Notify all ChartCloseButtons of mouse movement
+    for (list<ChartCloseButton*>::iterator it = closeButtons.begin(); it != closeButtons.end(); it++)
+    {
+        (*it)->mouseMoved(x, y);
+    }
+
+    emit requestRedraw();
+}
+
+void DisplayManager::handleClick()
+{
+    // Notify all ChartCloseButtons of mouse click
+    for (list<ChartCloseButton*>::iterator it = closeButtons.begin(); it != closeButtons.end(); it++)
+    {
+        (*it)->mouseClicked();
+    }
+
+    // Garbage collect leftover iterators
+    garbageCollect();
+
+    // Hacky method to reposition elements
+    renderAreaResized(renderWidth, renderHeight);
+    emit requestRedraw();}

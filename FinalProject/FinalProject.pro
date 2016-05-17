@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     Chart.cpp \
     DDIMatrix.cpp \
     Triangle.cpp \
-    displaymanager.cpp
+    displaymanager.cpp \
+    chartclosebutton.cpp
 
 HEADERS  += nielsenvis.h \
     renderarea.h \
@@ -27,7 +28,8 @@ HEADERS  += nielsenvis.h \
     Chart.h \
     DDIMatrix.h \
     Triangle.h \
-    displaymanager.h
+    displaymanager.h \
+    chartclosebutton.h
 
 FORMS    += nielsenvis.ui
 
