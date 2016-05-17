@@ -117,11 +117,10 @@ void Chart::setList(DDIMatrix matrix){
   // Market chosen by user (list of demos)
   if(m_type == MARKET){
     stringList = matrix.getDemo(m_name);
-    auto list_front = stringList.begin();
+    ListS::iterator list_front = stringList.begin();
 
-    for(int i = 0; i < matrix.getDCount(m_name); i++){
-	BarChart barChart;
-    advance(list_front, i);
+    for( ; list_front != stringList.end(); list_front++){
+    BarChart barChart;
 
 	barChart.setPlan(matrix.getDDI(m_name, *list_front, PLANNING));
 	barChart.setInter(matrix.getDDI(m_name, *list_front, INTERIM));
@@ -136,11 +135,10 @@ void Chart::setList(DDIMatrix matrix){
   // Demo chosen by user (list of markets)
   else if(m_type == DEMO){
     stringList = matrix.getMarket(m_name);
-    auto list_front = stringList.begin();
+    ListS::iterator list_front = stringList.begin();
 
-    for(int i = 0; i < matrix.getMCount(m_name); i++){
+    for( ; list_front != stringList.end(); list_front++){
       BarChart barChart;
-      advance(list_front, i);
 
       barChart.setPlan(matrix.getDDI(*list_front, m_name, PLANNING));
       barChart.setInter(matrix.getDDI(*list_front, m_name,  INTERIM));
