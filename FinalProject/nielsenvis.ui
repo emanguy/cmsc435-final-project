@@ -181,6 +181,9 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
       <property name="autoFillBackground">
        <bool>false</bool>
       </property>

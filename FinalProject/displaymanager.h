@@ -1,3 +1,9 @@
+/**
+ * This class is used for displaying, managing, and rendering different charts in the associated RenderArea.
+ *
+ * @author Evan Rittenhouse
+ */
+
 #ifndef DISPLAYMANAGER_H
 #define DISPLAYMANAGER_H
 
@@ -9,6 +15,7 @@
 #include "DDIMatrix.h"
 #include "Triangle.h"
 #include "Chart.h"
+#include "chartclosebutton.h"
 
 using namespace std;
 
@@ -32,9 +39,12 @@ private:
 
     DDIMatrix *graphData;
     list<Chart> charts;
+    list<ChartCloseButton*> closeButtons;
+    list<list<ChartCloseButton*>::iterator> garbage; // For removing unnecessary iterators
 
     SortOrder sortMethods[4] = { &Chart::sortAlpha, &Chart::sortInter, &Chart::sortPlan, &Chart::sortFinal };
 
+    void garbageCollect();
 
 public:
     explicit DisplayManager(QObject *parent = 0);
@@ -60,6 +70,13 @@ public slots:
 
     // Set sort order for all charts
     void setSortOrder(int sortOrder);
+
+    // Remove a chart when requested
+    void removeChart(list<Chart>::iterator chart, list<ChartCloseButton*>::iterator button);
+
+    // Mouse handling
+    void handleMouseMove(int x, int y);
+    void handleClick();
 };
 
 #endif // DISPLAYMANAGER_H

@@ -1,5 +1,4 @@
 #include <QFileDialog>
-#include <QDebug>
 #include <iostream>
 #include "nielsenvis.h"
 #include "ui_nielsenvis.h"
@@ -48,6 +47,10 @@ NielsenVis::NielsenVis(QWidget *parent) :
 
     // Make the display manager report what files it has
     connect(&renderer, SIGNAL(updateStatusLine(QString)), ui->statusBar, SLOT(showMessage(QString)));
+
+    // Allow display manager to handle mouse actions within the render area
+    connect(ui->Render, SIGNAL(mouseMoved(int,int)), &renderer, SLOT(handleMouseMove(int,int)));
+    connect(ui->Render, SIGNAL(mouseClicked()), &renderer, SLOT(handleClick()));
 
     ////////////// END EVENT BINDING //////////////////
 
