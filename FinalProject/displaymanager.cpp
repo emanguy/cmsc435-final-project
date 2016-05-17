@@ -63,6 +63,17 @@ void DisplayManager::Render(QGLWidget* renderArea)
     {
         (*btnIterator)->Render();
     }
+
+    // Add a legend at the bottom
+    glColor3f(0, 1, 0);
+    renderArea->renderText(0, renderHeight - 50, "Interim");
+
+    glColor3f(1, 0 , 0);
+    renderArea->renderText(0, renderHeight - 30, "Planning");
+
+    glColor3f(0, 0.5, 1);
+    renderArea->renderText(0, renderHeight - 10, "Final");
+
 }
 
 // Set the width and height of all charts manually
