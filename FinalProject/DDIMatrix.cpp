@@ -429,6 +429,10 @@ float DDIMatrix::getDDI(std::string marketID, std::string demoID, eDataType type
       }
     }
   }
+  else
+  {
+      cout << "Hit end of map while trying to find " << marketID << " " << demoID << endl;
+  }
   return result;
 }
 

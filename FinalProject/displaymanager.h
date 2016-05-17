@@ -34,6 +34,8 @@ private:
     list<Chart> charts;
 
     SortOrder sortMethods[4] = { &Chart::sortAlpha, &Chart::sortInter, &Chart::sortPlan, &Chart::sortFinal };
+    QString statusLine;
+
 
 public:
     explicit DisplayManager(QObject *parent = 0);
