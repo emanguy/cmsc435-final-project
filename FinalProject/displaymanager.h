@@ -34,7 +34,6 @@ private:
     list<Chart> charts;
 
     SortOrder sortMethods[4] = { &Chart::sortAlpha, &Chart::sortInter, &Chart::sortPlan, &Chart::sortFinal };
-    QString statusLine;
 
 
 public:
@@ -47,6 +46,7 @@ public:
 signals:
     void ddiDataAdded(list<string> demoNames, list<string> mktNames);
     void requestRedraw();
+    void updateStatusLine(const QString& statusLine);
 
 public slots:
     // Updates elements to conform to the size of the render area

@@ -11,6 +11,10 @@ NielsenVis::NielsenVis(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // Set the initial value of the status area
+    ui->statusBar->showMessage("Please add the necessary CSV data files.");
+
+    // Bind unique identifiers to the radio buttons
     ui->sortStyles->setId(ui->Name, ALPHA_SORT);
     ui->sortStyles->setId(ui->Int, INTER_SORT);
     ui->sortStyles->setId(ui->Plan, PLANN_SORT);
@@ -41,6 +45,9 @@ NielsenVis::NielsenVis(QWidget *parent) :
 
     // Make the display manager resize its contents when the window resizes
     connect(ui->Render, SIGNAL(resized(int,int)), &renderer, SLOT(renderAreaResized(int,int)));
+
+    // Make the display manager report what files it has
+    connect(&renderer, SIGNAL(updateStatusLine(QString)), ui->statusBar, SLOT(showMessage(QString)));
 
     ////////////// END EVENT BINDING //////////////////
 
@@ -147,6 +154,6 @@ void NielsenVis::prepareChartAdd()
     }
     else
     {
-        qDebug() << "No chart data found";
+        ui->statusBar->showMessage("You must add data files first.", 3000);
     }
 }

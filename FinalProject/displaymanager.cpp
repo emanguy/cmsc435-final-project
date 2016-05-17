@@ -13,8 +13,6 @@ DisplayManager::DisplayManager(QObject *parent) : QObject(parent),
         updatedFileName[INTERIM] = false;
         updatedFileName[PLANNING] = false;
         updatedFileName[FINAL] = false;
-
-        statusLine = "You still need to add 3 CSV data files: interim planning final";
 }
 
 DisplayManager::~DisplayManager()
@@ -36,9 +34,6 @@ void DisplayManager::Render(QGLWidget* renderArea)
     {
         iterator->Render(renderArea);
     }
-
-    glColor3f(1, 1, 0);
-    renderArea->renderText(chartPaddingH, renderHeight, statusLine);
 }
 
 void DisplayManager::setChartDimensions(float width, float height)
@@ -107,7 +102,7 @@ void DisplayManager::updateFile(const string &fileName, eDataType whichFile)
         list<string> markets = graphData->getMarkets();
 
         emit ddiDataAdded(demos, markets);
-        updateStatusLine("");
+        emit updateStatusLine("Files loaded.");
     }
     else
     {
@@ -135,7 +130,7 @@ void DisplayManager::updateFile(const string &fileName, eDataType whichFile)
         remainingFiles = "You still need to add " + QString::number(numRemainingFiles) + " CSV data files: " + remainingFiles;
 
         // Update the status line with this new string
-        updateStatusLine(remainingFiles);
+        emit updateStatusLine(remainingFiles);
     }
 }
 
@@ -143,8 +138,6 @@ void DisplayManager::updateFile(const string &fileName, eDataType whichFile)
 void DisplayManager::chartAdd(const string &category, bool isDemo)
 {
     Chart newChart(chartWidth, chartHeight);
-
-    qDebug() << "Category" << category.c_str() << "market/demo" << (isDemo? "demo" : "market");
 
     // Specify data for chart
     newChart.setType((isDemo? DEMO : MARKET));
