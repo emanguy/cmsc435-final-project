@@ -35,6 +35,7 @@ private:
 
     SortOrder sortMethods[4] = { &Chart::sortAlpha, &Chart::sortInter, &Chart::sortPlan, &Chart::sortFinal };
 
+
 public:
     explicit DisplayManager(QObject *parent = 0);
     void Render(QGLWidget* renderArea);
@@ -45,6 +46,7 @@ public:
 signals:
     void ddiDataAdded(list<string> demoNames, list<string> mktNames);
     void requestRedraw();
+    void updateStatusLine(const QString& statusLine);
 
 public slots:
     // Updates elements to conform to the size of the render area

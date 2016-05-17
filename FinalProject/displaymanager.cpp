@@ -102,6 +102,35 @@ void DisplayManager::updateFile(const string &fileName, eDataType whichFile)
         list<string> markets = graphData->getMarkets();
 
         emit ddiDataAdded(demos, markets);
+        emit updateStatusLine("Files loaded.");
+    }
+    else
+    {
+        // Build "remaining files" string
+        QString remainingFiles = "";
+        int numRemainingFiles = 0;
+
+        if (!updatedFileName[INTERIM])
+        {
+            remainingFiles += " interim ";
+            numRemainingFiles++;
+        }
+        if (!updatedFileName[PLANNING])
+        {
+            remainingFiles += " planning ";
+            numRemainingFiles++;
+        }
+        if (!updatedFileName[FINAL])
+        {
+            remainingFiles += " final ";
+            numRemainingFiles++;
+        }
+
+        // Construct beginning of string
+        remainingFiles = "You still need to add " + QString::number(numRemainingFiles) + " CSV data files: " + remainingFiles;
+
+        // Update the status line with this new string
+        emit updateStatusLine(remainingFiles);
     }
 }
 
