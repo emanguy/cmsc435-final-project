@@ -13,6 +13,11 @@ DisplayManager::DisplayManager(QObject *parent) : QObject(parent),
         updatedFileName[INTERIM] = false;
         updatedFileName[PLANNING] = false;
         updatedFileName[FINAL] = false;
+
+        sortMethods[0] = &Chart::sortAlpha;
+        sortMethods[1] = &Chart::sortInter;
+        sortMethods[2] = &Chart::sortPlan;
+        sortMethods[3] = &Chart::sortFinal;
 }
 
 // Deletes dynamically allocated DDIMatrix when this is destroyed

@@ -42,7 +42,7 @@ private:
     list<ChartCloseButton*> closeButtons;
     list<list<ChartCloseButton*>::iterator> garbage; // For removing unnecessary iterators
 
-    SortOrder sortMethods[4] = { &Chart::sortAlpha, &Chart::sortInter, &Chart::sortPlan, &Chart::sortFinal };
+    SortOrder sortMethods[4];
 
     void garbageCollect();
 
